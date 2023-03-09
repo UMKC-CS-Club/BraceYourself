@@ -67,6 +67,11 @@ def main():
                     cell_matrix.append(cell_matrix.pop(0))
                     cell_matrix.append(cell_matrix.pop(0))
 
+                elif pressed[pygame.K_RIGHT]:
+                    curr_brush = (curr_brush + 1) % len(pallete)
+                elif pressed[pygame.K_LEFT]:
+                    curr_brush = (curr_brush - 1) % len(pallete)
+
             elif event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEMOTION:
                 pressed = pygame.mouse.get_pressed()
 
@@ -77,13 +82,6 @@ def main():
                     cell_matrix[r][k] = pallete[curr_brush]
                 elif pressed[2]:  # eraser
                     cell_matrix[r][k] = pallete[0]
-
-            elif event.type == pygame.KEYDOWN:
-                pressed = pygame.key.get_pressed()
-                if pressed[pygame.K_RIGHT]:
-                    curr_brush = (curr_brush + 1) % len(pallete)
-                elif pressed[pygame.K_LEFT]:
-                    curr_brush = (curr_brush - 1) % len(pallete)
 
         screen.fill((0, 0, 0))
 
