@@ -30,19 +30,19 @@ def node_exists(matrix, width, height, row, column):
 def display_solution(solution, knots):
     string_colors = {}
     edge_strings = {}
-    nodes = []
 
     for variable, value in solution.items():
         if isinstance(variable, int):
             string_colors[variable] = value
         else:
-            nodes.extend(variable)
             edge_strings[variable] = value
 
     graph = nx.Graph()
-    for node in nodes:
-        (r, c) = node
-        graph.add_node(node, pos=(c, -r), color=knots[r][c])
+    for f, row in enumerate(knots):
+        for b, knot_color in enumerate(row):
+            if knot_color is None:
+                continue
+            graph.add_node((f, b), pos=(b, -f), color=knot_color)
 
     for (start, end), string in edge_strings.items():
         graph.add_edge(start, end, color=string_colors[string])
@@ -57,17 +57,30 @@ def display_solution(solution, knots):
 
 
 def main():
-    BLUE = (0, 0, 1)
-    PINK = (1, 0.5, 0.7)
-    ORNG = (1, 0.5, 0)
+    B = (0, 0, 1)
+    P = (1, 0.5, 0.7)
+    W = (0.8, 0.8, 0.8)  # so it's visible on a white background
+    _ = None
 
-    colors = [BLUE, PINK, ORNG]
+    colors = [B, P, W]
 
-    knots = [[None, BLUE, BLUE],
-             [PINK, PINK, PINK],
-             [BLUE, ORNG, None]]
+    # https://friendship-bracelets.net/patterns/110336
+    knots = [
+        [_, _, _, _, _, B, B, _, _, _, _, _],
+        [_, _, _, _, W, W, W, B, _, _, _, _],
+        [_, _, _, B, W, P, W, W, B, _, _, _],
+        [_, _, B, B, W, W, P, W, B, B, _, _],
+        [_, W, W, W, B, W, W, W, W, B, B, _],
+        [B, W, P, W, W, B, W, B, W, B, B, B],
+        [B, W, W, P, W, W, W, W, W, B, B, _],
+        [_, B, W, W, W, B, W, P, W, B, _, _],
+        [_, _, B, B, W, W, W, W, B, _, _, _],
+        [_, _, _, B, B, B, B, B, _, _, _, _],
+        [_, _, _, _, B, B, B, _, _, _, _, _],
+        [_, _, _, _, _, P, _, _, _, _, _, _],
+    ]
 
-    num_strings = 4
+    num_strings = 6
 
     problem = Problem()
 
