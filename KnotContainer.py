@@ -6,15 +6,55 @@ class KnotContainer:
     Just a 2D array rn, eventually an array or arrays of length n_strings / 2
     """
 
-    def __init__(self, n_strings, n_primary_rows):
+    def __init__(self, n_strings, n_primary_rows, row_width, skipped_rows, matrix):
+        """ Not meant to be used directly, please use .empty() or .from_dict() """
         self.n_strings = n_strings
-        self.n_rows = n_primary_rows
-        self.row_width = ceil(n_strings / 2)
-        self.skipped_rows = self.row_width - 1
+        self.n_primary_rows = n_primary_rows
+        self.row_width = row_width
+        self.skipped_rows = skipped_rows
 
-        height = self.n_rows + self.skipped_rows
+        self.matrix = matrix
+
+    @classmethod
+    def empty(cls, n_strings, n_primary_rows):
+        row_width = ceil(n_strings / 2)
+        skipped_rows = row_width - 1
+
+        height = n_primary_rows + skipped_rows
         # TODO: store rows of length row_width
-        self.matrix = [[None] * height for i in range(height)]
+        matrix = [[None] * height for i in range(height)]
+
+        return cls(
+            n_strings,
+            n_primary_rows,
+            row_width,
+            skipped_rows,
+            matrix,
+        )
+
+    @classmethod
+    def from_dict(cls, d):
+        n_strings = d['n_strings']
+        matrix = d['matrix']
+
+        row_width = ceil(n_strings / 2)
+        skipped_rows = row_width - 1
+
+        n_primary_rows = len(matrix) - skipped_rows
+
+        return cls(
+            n_strings,
+            n_primary_rows,
+            row_width,
+            skipped_rows,
+            matrix,
+        )
+
+    def to_dict(self):
+        return {
+            "n_strings": self.n_strings,
+            "matrix": self.matrix,
+        }
 
     def add_primary_row(self):
         for row in self.matrix:

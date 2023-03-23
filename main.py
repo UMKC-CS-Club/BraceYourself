@@ -1,21 +1,17 @@
 import pygame
-import json
-
-from KnotContainer import KnotContainer
 from Projector import Projector
+from terminal_interface import get_knot_container, prompt_save
 
 
 def main():
     pygame.init()
 
-    n_strings = 12
-    n_primary_rows = 12
-    knots = KnotContainer(n_strings, n_primary_rows)
+    knots = get_knot_container()
 
     cscribe_radius = 25
 
     screen_width = knots.row_width * 2 * cscribe_radius
-    screen_height = knots.n_rows * 2 * cscribe_radius
+    screen_height = knots.n_primary_rows * 2 * cscribe_radius
 
     projector = Projector(knots, cscribe_radius, screen_width)
 
@@ -54,10 +50,18 @@ def main():
 
                 (b, f), = projector.unproject_points(event.pos)
 
+                event_used, color = False, None
+
                 if pressed[0]:  # brush
-                    knots[f, b] = pallete[curr_brush]
+                    event_used, color = True, pallete[curr_brush]
                 elif pressed[2]:  # eraser
-                    knots[f, b] = None
+                    event_used, color = True, None
+
+                if event_used:
+                    try:
+                        knots[f, b] = color
+                    except IndexError as e:
+                        pass
 
         screen.fill((0, 0, 0))
 
@@ -88,10 +92,9 @@ def main():
 
     pygame.quit()
 
-    # TODO: fix autosave
+    # TODO: Store pallet and indices rather than duplicated RGBs
 
-    # with open('autosave.json', 'w') as f:
-    #     json.dump(cell_matrix, f)
+    prompt_save(knots)
 
 
 if __name__ == '__main__':
