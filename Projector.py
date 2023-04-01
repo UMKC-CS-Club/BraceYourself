@@ -17,8 +17,8 @@ class Projector:
 
         self.about_pivot_rotation = np.matrix([
             [1, -1, 0],
-            [1, 1, 0],
-            [0, 0, 1],
+            [1, 1,  0],
+            [0, 0,  1],
         ])
 
         self.cscribe_scale = np.matrix([
