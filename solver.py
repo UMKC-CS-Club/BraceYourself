@@ -1,10 +1,7 @@
-import json
-
 import networkx as nx
 from constraint import Problem
 from matplotlib import pyplot
 
-from KnotContainer import KnotContainer
 from terminal_interface import prompt_user_save
 
 
@@ -60,14 +57,9 @@ def display_solution(solution, knots):
 
 
 def main():
-    B = [0, 0, 255]
-    P = [255, 127, 178]
-    W = [200, 200, 200]  # so it's visible on a white background
-    _ = None
-
-    colors = [B, P, W]
-
     knots = prompt_user_save()
+
+    colors = knots.get_active_colors()
 
     problem = Problem()
 
