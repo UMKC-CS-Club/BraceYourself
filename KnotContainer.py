@@ -62,9 +62,16 @@ class KnotContainer:
 
         self.matrix.append([None] * (len(self.matrix) + 1))
 
+        self.n_primary_rows += 1
+
     def check_valid_position(self, f, b):
-        # TODO: Lower bound check
-        return (f + b >= self.skipped_rows) and (abs(f - b) <= self.row_width)
+        return (
+            (0 <= f + b - self.skipped_rows < 2 * self.n_primary_rows - 1)  # TODO: Verify this
+            and (abs(f - b) <= self.row_width)
+        )
+
+    def check_knot_exists(self, f, b):
+        return self.check_valid_position(f, b) and self.matrix[f][b] is not None
 
     def __getitem__(self, key):
         if not isinstance(key, tuple) or not len(key) == 2:
@@ -81,7 +88,7 @@ class KnotContainer:
         if not isinstance(key, tuple) or not len(key) == 2:
             raise ValueError(f"(f, b)")  # TODO: better error message
 
-        f, b = map(int, key)
+        f, b = key
 
         if not self.check_valid_position(f, b):
             raise IndexError(f"({f}, {b}) out of range")

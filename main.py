@@ -19,9 +19,9 @@ def main():
 
     pallete = [
         (0, 0, 0),
-        (255, 128, 0),
-        (0, 255, 0),
-        (200, 130, 0),
+        (200, 200, 200),
+        (255, 127, 178),
+        (0, 0, 255),
     ]
 
     curr_brush = 1
@@ -36,7 +36,8 @@ def main():
                 pressed = pygame.key.get_pressed()
 
                 if pressed[pygame.K_SPACE]:
-                    (b, f), = projector.unproject_points(event.pos)
+                    coord, = projector.unproject_points(event.pos)
+                    (b, f) = map(int, coord)
                     curr_brush = pallete.index(knots[f, b])
 
                 elif pressed[pygame.K_RIGHT]:
@@ -45,10 +46,17 @@ def main():
                 elif pressed[pygame.K_LEFT]:
                     curr_brush = (curr_brush - 1) % len(pallete)
 
+                elif pressed[pygame.K_d]:
+                    coord, = projector.unproject_points(pygame.mouse.get_pos())
+                    (b, f) = map(int, coord)
+                    color = knots[f, b]
+                    print(f"({f}, {b}), {color}")
+
             elif event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEMOTION:
                 pressed = pygame.mouse.get_pressed()
 
-                (b, f), = projector.unproject_points(event.pos)
+                coord, = projector.unproject_points(pygame.mouse.get_pos())
+                (b, f) = map(int, coord)
 
                 event_used, color = False, None
 
@@ -79,11 +87,12 @@ def main():
                     knot_color,
                     projected_square,
                 )
+
             pygame.draw.polygon(
                 screen,
                 (255, 255, 255),
                 projected_square,
-                width=1
+                width=1,
             )
 
         pygame.draw.circle(screen, pallete[curr_brush], pygame.mouse.get_pos(), 0.1 * cscribe_radius)
