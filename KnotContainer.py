@@ -22,7 +22,7 @@ class KnotContainer:
         row_width = ceil(n_strings / 2)
         skipped_rows = row_width - 1
 
-        height = n_primary_rows + skipped_rows
+        height = n_primary_rows + skipped_rows + 1
         # TODO: store rows of length row_width
         matrix = [[None] * height for i in range(height)]
         colors = Counter()
@@ -58,7 +58,7 @@ class KnotContainer:
         row_width = ceil(n_strings / 2)
         skipped_rows = row_width - 1
 
-        n_primary_rows = len(matrix) - skipped_rows
+        n_primary_rows = len(matrix) - skipped_rows - 1
 
         return cls(
             n_strings,
@@ -104,8 +104,9 @@ class KnotContainer:
         self.n_primary_rows += 1
 
     def check_valid_position(self, f, b):
+        # TODO: Right edges of odd-stringed patterns
         return (
-            (0 <= f + b - self.skipped_rows < 2 * self.n_primary_rows - 1)
+            (0 <= f + b - self.skipped_rows < 2 * self.n_primary_rows)
             and (abs(f - b) <= self.row_width)
         )
 

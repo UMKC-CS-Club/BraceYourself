@@ -79,7 +79,7 @@ def prompt_load_file(prompt, extractor_validator):
 
 def prompt_user_canvas():
     n_strings = prompt_number("How many strings? ", 2, float("inf"))
-    n_primary_rows = prompt_number("How many rows? ", 2, float("inf"))
+    n_primary_rows = prompt_number("How many pairs of rows? ", 1, float("inf"))
     return KnotContainer.empty(n_strings, n_primary_rows)
 
 
